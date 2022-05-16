@@ -3,12 +3,27 @@ const UserModel = require('../models/UserModel')
 //const md5 = require("md5");
 //
 //level 4
-const bcrypt = require("bcrypt");
+//const bcrypt = require("bcrypt");
 //
-
+//level 5
+const passport = require("passport");
+//
 exports.register = async (req, res) => {
+    //level 5
+    UserModel.register({username: req.body.username}, req.body.password, function (err, user) {
+        if (err){
+            console.log(err)
+            res.redirect("/register")
+        }else {
+            passport.authenticate("local")(req, res, function () {
+                res.redirect("/secrets")
+            });
+        }
+    })
+    //
+
     //level 4
-    bcrypt.hash(req.body.password, 10, function(err, hash) {
+    /*bcrypt.hash(req.body.password, 10, function(err, hash) {
         const newUser = new UserModel({
             email: req.body.username,
             //level 1 2
@@ -26,12 +41,29 @@ exports.register = async (req, res) => {
                 res.render("secrets");
             }
         });
-    })
+    })*/
     //
 };
 
 exports.login = async (req, res) => {
-    const username = req.body.username;
+    //level 5
+        let user =new UserModel({
+            username:req.body.username,
+            password:req.body.password
+        })
+
+        req.login(user, function (err){
+            if (err){
+                console.log(err)
+            }else {
+                passport.authenticate("local")(req, res, function () {
+                    res.redirect("/secrets")
+                });
+            }
+        })
+    //
+
+    /*const username = req.body.username;
     const password = req.body.password;
     //const password = req.body.password;
     //level 3
@@ -48,11 +80,11 @@ exports.login = async (req, res) => {
                         res.render("secrets");
                     }
                 });
-                /*if (foundUser.password === password) {
-                    res.render("secrets");
-                }*/
+                //if (foundUser.password === password) {
+                //    res.render("secrets");
+                //}
             }
         }
-    })
+    })*/
 
 };
