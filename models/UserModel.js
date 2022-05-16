@@ -12,7 +12,8 @@ let userSchema = new mongoose.Schema({
 //userSchema.plugin(encrypt, { secret: SECRET, encryptedFields: ["password"] });
 //
 //level 2.1 - it is better to hide our secret
-userSchema.plugin(encrypt, { secret: process.env.SECRET, encryptedFields: ["password"] });
+//userSchema.plugin(encrypt, { secret: process.env.SECRET, encryptedFields: ["password"] });
+
 
 let userModel = new mongoose.model("User", userSchema);
 module.exports = userModel;

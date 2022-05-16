@@ -1,14 +1,16 @@
 //level 2.1
-require('dotenv').config();
+//require('dotenv').config();
 //
 
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
-
+//level 3
+const md5 = require('md5');
+//
 //level 2
-const encrypt = require("mongoose-encryption");
+//const encrypt = require("mongoose-encryption");
 //
 
 const app = express();
