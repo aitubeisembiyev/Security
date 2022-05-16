@@ -1,29 +1,42 @@
 const UserModel = require('../models/UserModel')
 //level 3
-const md5 = require("md5");
+//const md5 = require("md5");
+//
+//level 4
+const bcrypt = require("bcrypt");
+const {hash} = require("bcrypt");
 //
 
 exports.register = async (req, res) => {
-    console.log(req.body.username)
-    const newUser =  new UserModel({
-        email: req.body.username,
-        //password: req.body.password
-        password: md5(req.body.password)
-    });
-    newUser.save(function(err){
-        if (err) {
-            console.log(err);
-        } else {
-            res.render("secrets");
-        }
-    });
+    //level 4
+    bcrypt.hash(req.body.password, 10, function(err, hash) {
+        const newUser = new UserModel({
+            email: req.body.username,
+            //level 1 2
+            //password: req.body.password
+            //level 3
+            //password: md5(req.body.password)
+            //level 4
+            password:hash
+            //
+        });
+        newUser.save(function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.render("secrets");
+            }
+        });
+    })
+    //
 };
 
 exports.login = async (req, res) => {
     const username = req.body.username;
+    const password = req.body.password;
     //const password = req.body.password;
     //level 3
-    const password = md5(req.body.password);
+    //const password = md5(req.body.password);
     //
 
     UserModel.findOne({email: username}, function(err, foundUser){
@@ -31,10 +44,16 @@ exports.login = async (req, res) => {
             res.send("404")
         } else {
             if (foundUser) {
-                if (foundUser.password === password) {
+                bcrypt.compare(password, hash, function(err, result) {
+                    if(result===true) {
+                        res.render("secrets");
+                    }
+                });
+                /*if (foundUser.password === password) {
                     res.render("secrets");
-                }
+                }*/
             }
         }
-    });
+    })
+
 };
