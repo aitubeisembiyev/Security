@@ -4,7 +4,6 @@ const UserModel = require('../models/UserModel')
 //
 //level 4
 const bcrypt = require("bcrypt");
-const {hash} = require("bcrypt");
 //
 
 exports.register = async (req, res) => {
@@ -44,7 +43,7 @@ exports.login = async (req, res) => {
             res.send("404")
         } else {
             if (foundUser) {
-                bcrypt.compare(password, hash, function(err, result) {
+                bcrypt.compare(password, foundUser.password, function(err, result) {
                     if(result===true) {
                         res.render("secrets");
                     }
