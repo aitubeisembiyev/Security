@@ -1,5 +1,5 @@
-//level 2.1
-//require('dotenv').config();
+//level 2.1 and 6
+require('dotenv').config();
 //
 
 const express = require("express");
@@ -9,6 +9,9 @@ const mongoose = require("mongoose");
 //level 5
 const session = require('express-session')
 const passport=require('passport')
+//
+//level 6
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 //
 //level 4
 //const bcrypt = require('bcrypt');
@@ -73,6 +76,19 @@ app.get("/secrets", function(req, res){
         res.redirect("/login")
     }
 });
+
+//level 6
+app.get("/auth/google",
+    passport.authenticate('google',{ scope: ["profile"] })
+)
+
+app.get('/auth/google/osekter',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    function(req, res) {
+        // Successful authentication, redirect home.
+        res.redirect('/secrets');
+    });
+//
 
 app.get("/logout",function (req, res){
     req.logout()

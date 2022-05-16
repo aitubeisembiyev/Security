@@ -88,3 +88,8 @@ exports.login = async (req, res) => {
     })*/
 
 };
+//level 6
+/*exports.authGoogle = async (req, res) => {
+    console.log("asd")
+    passport.authenticate('google',{ scope: ["profile"] })
+}*/
